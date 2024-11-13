@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Crea un Nuovo Progetto</h1>
-    <form action="{{ route('admin.projects.store') }}" method="POST">
+    <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nome Progetto</label>
@@ -41,6 +41,10 @@
                     <label>{{ $technology->name }}</label>
                 </div>
             @endforeach
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Carica Immagine</label>
+            <input type="file" class="form-control" id="image" name="image">
         </div>
 
         <button type="submit" class="btn btn-primary">Salva Progetto</button>

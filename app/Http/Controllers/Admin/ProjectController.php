@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\Type;
 use App\Models\Technology;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -39,7 +40,15 @@ class ProjectController extends Controller
         // Otteniamo i dati validati
         $validated = $request->validated();
 
-        // Creiamo il progetto con i dati validati (esclusa la relazione many-to-many)
+        // Gestiamo l'immagine se è presente
+        if ($request->hasFile('image')) {
+            // Salviamo l'immagine nella cartella 'projects' all'interno di storage/app/public
+            $path = $request->file('image')->store('projects', 'public');
+            // Aggiungiamo il percorso dell'immagine ai dati del progetto
+            $validated['image'] = $path;
+        }
+
+        // Creiamo il progetto con i dati validati (incluso il percorso dell'immagine)
         $project = Project::create($validated);
 
         // Associazione delle tecnologie al progetto
