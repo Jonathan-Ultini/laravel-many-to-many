@@ -32,10 +32,20 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
-        Project::create($validated);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'link' => 'required|url',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'type_id' => 'nullable|exists:types,id',
+            'technologies' => 'array',
+            'technologies.*' => 'exists:technologies,id',
+        ]);
+
+        $project = Project::create($validated);
+        $project->technologies()->attach($request->technologies);
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto creato con successo!');
     }
@@ -61,10 +71,20 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(Request $request, Project $project)
     {
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'link' => 'required|url',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'type_id' => 'nullable|exists:types,id',
+            'technologies' => 'array',
+            'technologies.*' => 'exists:technologies,id',
+        ]);
+
         $project->update($validated);
+        $project->technologies()->sync($request->technologies);
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto aggiornato con successo!');
     }
