@@ -30,6 +30,7 @@ class ProjectController extends Controller
         return view('admin.projects.create', compact('types', 'technologies'));
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -49,6 +50,7 @@ class ProjectController extends Controller
         return redirect()->route('admin.projects.index')->with('success', 'Progetto creato con successo!');
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -66,6 +68,7 @@ class ProjectController extends Controller
         $technologies = Technology::all();
         return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -87,6 +90,7 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto aggiornato con successo!');
     }
+
 
 
     /**
