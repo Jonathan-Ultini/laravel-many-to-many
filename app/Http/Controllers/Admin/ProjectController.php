@@ -33,20 +33,18 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'link' => 'required|url',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'type_id' => 'nullable|exists:types,id',
-            'technologies' => 'array',
-            'technologies.*' => 'exists:technologies,id',
-        ]);
+        // Otteniamo i dati validati
+        $validated = $request->validated();
 
+        // Creiamo il progetto con i dati validati (esclusa la relazione many-to-many)
         $project = Project::create($validated);
-        $project->technologies()->attach($request->technologies);
+
+        // Associazione delle tecnologie al progetto
+        if (isset($validated['technologies'])) {
+            $project->technologies()->attach($validated['technologies']);
+        }
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto creato con successo!');
     }
@@ -72,23 +70,24 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'link' => 'required|url',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'type_id' => 'nullable|exists:types,id',
-            'technologies' => 'array',
-            'technologies.*' => 'exists:technologies,id',
-        ]);
+        // Otteniamo i dati validati
+        $validated = $request->validated();
 
+        // Aggiorniamo il progetto con i dati validati
         $project->update($validated);
-        $project->technologies()->sync($request->technologies);
+
+        // Aggiorniamo l'associazione delle tecnologie al progetto
+        if (isset($validated['technologies'])) {
+            $project->technologies()->sync($validated['technologies']);
+        } else {
+            $project->technologies()->detach(); // Rimuove tutte le tecnologie se non selezionate
+        }
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto aggiornato con successo!');
     }
+
 
     /**
      * Remove the specified resource from storage.
