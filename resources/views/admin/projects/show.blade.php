@@ -7,5 +7,16 @@
     <p><strong>Data di Avvio:</strong> {{ $project->start_date }}</p>
     <p><strong>Data di Fine:</strong> {{ $project->end_date ?? 'Non specificata' }}</p>
     <p><strong>Tipologia:</strong> {{ $project->type ? $project->type->name : 'Non specificata' }}</p>
+    <h3>Tecnologie Utilizzate:</h3>
+    @if($project->technologies->isNotEmpty())
+        <ul>
+            @foreach($project->technologies as $technology)
+                <li>{{ $technology->name }}</li>
+            @endforeach
+        </ul>
+    @else
+        <p>Nessuna tecnologia associata.</p>
+    @endif
+
 </div>
 @endsection
