@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
     <h1>Tecnologie</h1>
     <a href="{{ route('admin.technologies.create') }}" class="btn btn-primary">Aggiungi Tecnologia</a>
 
@@ -28,4 +29,5 @@
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection

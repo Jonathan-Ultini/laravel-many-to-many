@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
     <h1>Modifica Tecnologia</h1>
 
     <form action="{{ route('admin.technologies.update', $technology->id) }}" method="POST">
@@ -13,4 +14,5 @@
 
         <button type="submit" class="btn btn-success mt-3">Aggiorna</button>
     </form>
+</div>
 @endsection
