@@ -32,6 +32,17 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <h3>Seleziona Tecnologie:</h3>
+            @foreach($technologies as $technology)
+                <div>
+                    <input type="checkbox" name="technologies[]" value="{{ $technology->id }}"
+                        @if(isset($project) && $project->technologies->contains($technology->id)) checked @endif>
+                    <label>{{ $technology->name }}</label>
+                </div>
+            @endforeach
+        </div>
+
         <button type="submit" class="btn btn-primary">Salva Progetto</button>
     </form>
 </div>
