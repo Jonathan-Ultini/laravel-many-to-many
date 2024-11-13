@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Modifica Progetto</h1>
-    <form action="{{ route('admin.projects.update', $project) }}" method="POST">
+    <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -43,6 +43,19 @@
                 </div>
             @endforeach
         </div>
+        <!-- Campo per l'immagine -->
+        <div class="mb-3">
+            <label for="image" class="form-label">Carica una Nuova Immagine (opzionale)</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+
+        <!-- Se il progetto ha già un'immagine, mostriamo quella attuale -->
+        @if($project->image)
+            <div class="mb-3">
+                <label>Immagine attuale:</label>
+                <img src="{{ asset('storage/' . $project->image) }}" alt="Immagine del progetto" width="100">
+            </div>
+        @endif
         <button type="submit" class="btn btn-primary">Aggiorna Progetto</button>
     </form>
 </div>

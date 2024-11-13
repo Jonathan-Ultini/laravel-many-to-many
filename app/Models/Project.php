@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'link', 'start_date', 'end_date', 'type_id'];
+    protected $fillable = ['name', 'link', 'start_date', 'end_date', 'type_id', 'image'];
 
     // Relazione one-to-many con Type
     public function type()
@@ -23,6 +23,3 @@ class Project extends Model
         return $this->belongsToMany(Technology::class);
     }
 }
-
-
-

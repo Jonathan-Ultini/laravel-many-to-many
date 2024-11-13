@@ -60,6 +60,7 @@ class ProjectController extends Controller
     }
 
 
+
     /**
      * Display the specified resource.
      */
@@ -87,7 +88,20 @@ class ProjectController extends Controller
         // Otteniamo i dati validati
         $validated = $request->validated();
 
-        // Aggiorniamo il progetto con i dati validati
+        // Gestiamo l'immagine se è presente
+        if ($request->hasFile('image')) {
+            // Se esiste già un'immagine associata al progetto, la rimuoviamo
+            if ($project->image) {
+                Storage::disk('public')->delete($project->image);
+            }
+
+            // Salviamo la nuova immagine nella cartella 'projects' all'interno di storage/app/public
+            $path = $request->file('image')->store('projects', 'public');
+            // Aggiungiamo il percorso dell'immagine ai dati del progetto
+            $validated['image'] = $path;
+        }
+
+        // Aggiorniamo il progetto con i dati validati (incluso il percorso dell'immagine)
         $project->update($validated);
 
         // Aggiorniamo l'associazione delle tecnologie al progetto
@@ -99,6 +113,9 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.index')->with('success', 'Progetto aggiornato con successo!');
     }
+
+
+
 
 
 

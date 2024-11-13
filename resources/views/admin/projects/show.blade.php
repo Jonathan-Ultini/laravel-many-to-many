@@ -17,6 +17,9 @@
     @else
         <p>Nessuna tecnologia associata.</p>
     @endif
+    @if($project->image)
+        <img src="{{ asset('storage/' . $project->image) }}" alt="Immagine del progetto" class="img-fluid">
+    @endif
 
 </div>
 @endsection
